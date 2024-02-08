@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 """
 Functions for IO, mostly wrapped around GDAL
 

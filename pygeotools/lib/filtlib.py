@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 """
 Library of spatial filters for 2D NumPy arrays 
 

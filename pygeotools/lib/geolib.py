@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 """
 Geospatial functions for rasters, vectors.
 

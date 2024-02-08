@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 """
 Library of functions required for raster warping in memory or on disk
 
@@ -18,6 +18,7 @@ Instead of doing the 'first' stuff, check actual values before writing out origi
 import sys
 import os 
 import math
+import time
 
 from osgeo import gdal, osr
 import numpy as np
@@ -36,6 +37,14 @@ gdal.SetConfigOption('GDAL_MAX_DATASET_POOL_SIZE', '2048')
 #import resource
 #resource.setrlimit(resource.RLIMIT_CORE,(resource.RLIM_INFINITY, resource.RLIM_INFINITY))
 
+def custom_progress(complete, message, unknown):
+    bar_length = 40
+    block = int(round(bar_length * complete))
+    text = "\rProgress: [{0}] {1:.2f}% completed.".format("#" * block + "-" * (bar_length - block), complete * 100)
+    print(text, end="")
+    if complete == 1:
+        print()
+        
 def warp(src_ds, res=None, extent=None, t_srs=None, r='cubic', driver=mem_drv, dst_fn=None, dst_ndv=None, options=[], verbose=True):
     """Warp an input dataset with predetermined arguments specifying output res/extent/srs
 
@@ -109,7 +118,7 @@ def warp(src_ds, res=None, extent=None, t_srs=None, r='cubic', driver=mem_drv, d
     #Create progress function
     prog_func = None
     if verbose:
-        prog_func = gdal.TermProgress
+        prog_func = custom_progress
     
     if dst_fn is None:
         #This is a dummy fn if only in mem, but can be accessed later via GetFileList()
@@ -153,7 +162,7 @@ def warp(src_ds, res=None, extent=None, t_srs=None, r='cubic', driver=mem_drv, d
         b.Fill(dst_ndv)
 
         if gauss:
-            from pygeotools.lib import filtlib
+            import filtlib
             #src_a = src_b.GetVirtualMemArray()
             #Compute resampling ratio to determine filter window size
             res_ratio = float(res)/src_res
@@ -184,27 +193,11 @@ def warp(src_ds, res=None, extent=None, t_srs=None, r='cubic', driver=mem_drv, d
             
             #In theory, NN should be fine since we already smoothed.  In practice, cubic still provides slightly better results
             #gra = gdal.GRA_NearestNeighbour
-    
-    """
-    if not verbose:
-        #Suppress GDAL progress bar
-        orig_stdout = sys.stdout
-        sys.stdout = open(os.devnull, 'w')
-    """
 
     #Note: default maxerror=0.0, second 0.0 argument
+    start_time = time.time()
     gdal.ReprojectImage(src_ds, dst_ds, src_srs.ExportToWkt(), t_srs.ExportToWkt(), gra, 0.0, 0.0, prog_func)
 
-    """
-    if not verbose:
-        sys.stdout.close()
-        sys.stdout = orig_stdout
-    """
-
-    #Note: this is now done in diskwarp
-    #Write out to disk
-    #if driver != mem_drv:
-    #    dst_ds.FlushCache()
 
     #Return GDAL dataset object in memory
     return dst_ds
@@ -309,6 +302,10 @@ def parse_srs(t_srs, src_ds_list=None):
             t_srs = None
     return t_srs
 
+
+
+
+    
 def parse_res(res, src_ds_list=None, t_srs=None):
     """Parse arbitrary input res 
 

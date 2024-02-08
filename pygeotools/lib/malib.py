@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 """
 Functions involving masked arrays
 
