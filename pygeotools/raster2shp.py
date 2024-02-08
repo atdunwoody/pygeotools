@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 
 """
 Utility to create shp footprints for a list of input raster(s)

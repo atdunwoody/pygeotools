@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 """
 Time conversion utilities
 """

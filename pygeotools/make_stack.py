@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 
 #Generate stack from input rasters
 

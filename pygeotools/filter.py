@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+
 """
 Command-line wrapper around raster filters in filtlib
 """
