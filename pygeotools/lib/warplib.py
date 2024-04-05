@@ -301,10 +301,6 @@ def parse_srs(t_srs, src_ds_list=None):
         else:
             t_srs = None
     return t_srs
-
-
-
-
     
 def parse_res(res, src_ds_list=None, t_srs=None):
     """Parse arbitrary input res 
