@@ -160,6 +160,7 @@ def b_getma(b):
     #This is more appropriate for float, handles precision issues
     bma = np.ma.masked_values(b.ReadAsArray(), b_ndv)
     #check if bma.max() is None or np.nan
+    print(bma.max())
     if bma.max() is None or np.isnan(bma.max()):
         bma = np.ma.masked_invalid(b.ReadAsArray())
     return bma
