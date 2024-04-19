@@ -1515,16 +1515,13 @@ def mad(a, axis=None, c=1.4826, return_med=False):
     Note: 1.4826 = 1/0.6745
     """
     a = checkma(a)
-    print("Stats for array")
-    print(get_stats(a))
     #return np.ma.median(np.fabs(a - np.ma.median(a))) / c
     if a.count() > 0:
         if axis is None:
-            print("Computing fast median mad")
+
             med = fast_median(a)
             out = fast_median(np.fabs(a - med)) * c
         else:
-            print("Computing axis median mad")
             med = np.ma.median(a, axis=axis)
             #The expand_dims is necessary for broadcasting
             out = np.ma.median(np.ma.fabs(a - np.expand_dims(med, axis=axis)), axis=axis) * c
