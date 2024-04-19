@@ -162,7 +162,10 @@ def b_getma(b):
     #check if bma.max() is None or np.nan
     print(bma.max())
     if bma.max() is None or np.isnan(bma.max()):
+        print("Warning: No valid data found in band")
         bma = np.ma.masked_invalid(b.ReadAsArray())
+        print(f"New max: {bma.max()}")
+        print(f"New min: {bma.min()}")
     return bma
 
 def get_sub_dim(src_ds, scale=None, maxdim=1024):
