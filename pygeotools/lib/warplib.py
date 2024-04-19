@@ -198,7 +198,7 @@ def warp(src_ds, res=None, extent=None, t_srs=None, r='cubic', driver=mem_drv, d
     start_time = time.time()
     gdal.ReprojectImage(src_ds, dst_ds, src_srs.ExportToWkt(), t_srs.ExportToWkt(), gra, 0.0, 0.0, prog_func)
 
-
+    print(f"End of warp: Res {res}, Extent {extent}, SRS {t_srs.ExportToProj4()}, Alg {r}, Time {time.time()-start_time:.2f}s")
     #Return GDAL dataset object in memory
     return dst_ds
 
