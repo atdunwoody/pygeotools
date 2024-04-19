@@ -159,6 +159,9 @@ def b_getma(b):
     #bma = np.ma.masked_equal(b.ReadAsArray(), b_ndv)
     #This is more appropriate for float, handles precision issues
     bma = np.ma.masked_values(b.ReadAsArray(), b_ndv)
+    #check if bma.max() is None or np.nan
+    if bma.max() is None or np.isnan(bma.max()):
+        bma = np.ma.masked_invalid(b.ReadAsArray())
     return bma
 
 def get_sub_dim(src_ds, scale=None, maxdim=1024):
