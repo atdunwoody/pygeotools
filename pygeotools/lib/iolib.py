@@ -139,6 +139,7 @@ def ds_getma(ds, bnum=1):
         Masked array containing raster values
     """
     b = ds.GetRasterBand(bnum)
+    print("Number of non-NaN values: {0:d}".format(np.count_nonzero(~np.isnan(b.ReadAsArray()))))
     return b_getma(b)
 
 #Given input band, return a masked array
@@ -156,6 +157,7 @@ def b_getma(b):
         Masked array containing raster values
     """
     b_ndv = get_ndv_b(b)
+    print(f"NDV: {b_ndv}")
     #bma = np.ma.masked_equal(b.ReadAsArray(), b_ndv)
     #This is more appropriate for float, handles precision issues
     bma = np.ma.masked_values(b.ReadAsArray(), b_ndv)
