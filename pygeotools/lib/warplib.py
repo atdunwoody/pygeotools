@@ -326,7 +326,7 @@ def parse_res(res, src_ds_list=None, t_srs=None):
 
     #Valid options for res
     res_str_list = ['first', 'last', 'min', 'max', 'mean', 'med', 'common_scale_factor']
-
+    print(f"Res input to parse_res in warp_lib: {res}")
     #Compute output resolution in t_srs
     if res in res_str_list and src_ds_list is not None:
         #Returns min, max, mean, med
@@ -354,6 +354,7 @@ def parse_res(res, src_ds_list=None, t_srs=None):
         res = geolib.get_res(gdal.Open(res), t_srs=t_srs, square=True)[0]
     else:
         res = float(res)
+    print(f"Res output from parse_res in warp_lib: {res}")
     return res
 
 def parse_extent(extent, src_ds_list=None, t_srs=None):
@@ -411,7 +412,7 @@ def parse_extent(extent, src_ds_list=None, t_srs=None):
         extent = [float(i) for i in extent.split(' ')]
     return extent
 
-def warp_multi(src_ds_list, res='first', extent='intersection', t_srs='first', r='cubic', warptype=memwarp, outdir=None, dst_ndv=None, verbose=True, debug=False):
+def warp_multi(src_ds_list, res='first', extent='intersection', t_srs='first', r='bilinear', warptype=memwarp, outdir=None, dst_ndv=None, verbose=True, debug=False):
     """This parses and checks inputs, then calls desired warp function with appropriate arguments for each input ds
     
     Parameters
@@ -513,7 +514,7 @@ def warp_multi(src_ds_list, res='first', extent='intersection', t_srs='first', r
 
     return out_ds_list
 
-def memwarp_multi(src_ds_list, res='first', extent='intersection', t_srs='first', r='cubic', verbose=True, dst_ndv=0):
+def memwarp_multi(src_ds_list, res='first', extent='intersection', t_srs='first', r='bilinear', verbose=True, dst_ndv=0):
     """Helper function for memwarp of multiple input GDAL Datasets
     """
     return warp_multi(src_ds_list, res, extent, t_srs, r, warptype=memwarp, verbose=verbose, dst_ndv=dst_ndv)
